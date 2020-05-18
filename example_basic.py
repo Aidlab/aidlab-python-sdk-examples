@@ -1,16 +1,16 @@
-from Aidlab import AidlabBLECommunication as communication
+from Aidlab.Aidlab import Aidlab
 
 
-class MainManager(communication.AidlabManager):
+class MainManager(Aidlab):
 
-    def is_connected(self, address):
-        print("Connected to: ", address)
+    def did_connect_aidlab(self, aidlab_address):
+        print("Connected to: ", aidlab_address)
 
-    def is_disconnected(self, aidlab):
-        print("Disconnected from: ", aidlab.address)
+    def did_disconnect_aidlab(self, aidlab_address):
+        print("Disconnected from: ", aidlab_address)
 
-    def data_receiver(self, aidlab, characteristic_name, data):
-        print(aidlab.address, characteristic_name, data)
+    def did_receive_respiration(self, value, timestamp, aidlab_address):
+        print(value)
 
 
 if __name__ == '__main__':

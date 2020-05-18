@@ -1,24 +1,24 @@
-from Aidlab import AidlabBLECommunication as communication
-from ctypes import CFUNCTYPE
+from Aidlab.Aidlab import Aidlab
 
-class WorkoutDetector(communication.AidlabManager):
 
-    def is_connected(self, address):
-        print("Connected to: ", address)
+class WorkoutDetector(Aidlab):
 
-    @CFUNCTYPE(None)
-    def pushup_callback():
-        print("pushup")
+    def did_connect_aidlab(self, aidlab_address):
+        print("Connected to: ", aidlab_address)
 
-    @CFUNCTYPE(None)
-    def jump_callback():
-        print("jump")
+    def did_detect_push_up(self, aidlab_address):
+        print("push-up", aidlab_address)
 
-    @CFUNCTYPE(None)
-    def situp_callback():
-        print("situp")
+    def did_detect_jump(self, aidlab_address):
+        print("jump ", aidlab_address)
 
-    
+    def did_detect_sit_up(self, aidlab_address):
+        print("situp", aidlab_address)
+
+    def did_detect_burpee(self, aidlab_address):
+        print("burpee", aidlab_address)
+
+
 if __name__ == '__main__':
 
     characteristics = ["motion"]

@@ -1,29 +1,28 @@
-from Aidlab import AidlabBLECommunication as communication
+from Aidlab.Aidlab import Aidlab
 
 first_address = "<YOUR FIRST AIDLAB's ADDRESS>"
 second_address = "<YOUR SECOND AIDLAB's ADDRESS>"
 
 
-class MainManager(communication.AidlabManager):
+class MainManager(Aidlab):
 
-    def is_connected(self, address):
-        print("Connected to: ", address)
+    def is_connected(self, aidlab_address):
+        print("Connected to: ", aidlab_address)
 
-    def is_disconnected(self, aidlab):
-        print("Disconnected from: ", aidlab.address)
+    def is_disconnected(self, aidlab_address):
+        print("Disconnected from: ", aidlab_address)
 
-    def data_receiver(self, aidlab, characteristic_name, data):
-        if aidlab.address == first_address:
-            if characteristic_name == "battery":
-                print("Battery: {}".format(data))
-            elif characteristic_name == "respiration":
-                print("Respiration: {}".format(data))
-        elif aidlab.address == second_address:
-            if characteristic_name == "battery":
-                print("Battery: {}".format(data))
-            elif characteristic_name == "respiration":
-                print("Respiration: {}".format(data))
+    def did_receive_respiration(self, value, timestamp, aidlab_address):
+        if aidlab_address == first_address:
+            print("Respiration: ", value, aidlab_address)
+        elif aidlab_address == second_address:
+            print("Respiration: ", value, aidlab_address)
 
+    def did_receive_battery_level(self, stateOfCharge, aidlab_address):
+        if aidlab_address == first_address:
+            print("Battery: ", stateOfCharge, aidlab_address)
+        elif aidlab_address == second_address:
+            print("Battery: ", stateOfCharge, aidlab_address)
 
 if __name__ == '__main__':
 
