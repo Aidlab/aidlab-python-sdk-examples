@@ -9,24 +9,14 @@ from Aidlab.AidlabPeripheral import AidlabPeripheral
 
 class Aidlab:
 
-    device_information = {}
-    ecgFiltrationMethod = {"normal": False, "aggressive": True}
-
     def __init__(self):
         # Container for AidlabSDK libs
         self.aidlab_sdk = {}
 
-        # default filtration method
-        self.filtrationMethod = self.ecgFiltrationMethod.get("normal",False)
-
         self.aidlab_peripheral = AidlabPeripheral(self)
 
     def create_aidlabSDK(self, aidlab_address):
-
         self.aidlab_sdk[aidlab_address] = AidlabSDK(self, aidlab_address)
-
-        self.aidlab_sdk[aidlab_address].set_ecg_filtration_method(self.filtrationMethod)
-        self.aidlab_sdk[aidlab_address].setup_workout_callback()
         self.aidlab_sdk[aidlab_address].setup_user_callback()
 
     def destroy(self, aidlab_address):
@@ -35,8 +25,11 @@ class Aidlab:
     def connect(self, characteristics, aidlabsMAC=None):
         self.aidlab_peripheral.run(characteristics, aidlabsMAC)
 
-    def set_ecg_filtration_method(self, ecg_filtration_method):
-        self.filtrationMethod = self.ecgFiltrationMethod.get(ecg_filtration_method,False)
+    def did_connect_aidlab(self, aidlab_address):
+        self.aidlab_sdk[aidlab_address].did_connect_aidlab()
+
+    def did_disconnect_aidlab(self, aidlab_address):
+        self.aidlab_sdk[aidlab_address].did_disconnect_aidlab()
 
     def did_receive_raw_temperature(self, data, aidlab_address):
         self.aidlab_sdk[aidlab_address].calculate_temperature(data)
@@ -72,75 +65,103 @@ class Aidlab:
         self.aidlab_sdk[aidlab_address].calculate_sound_volume(data)
 
     def did_receive_raw_firmware_revision(self, data, aidlab_address):
-        self.aidlab_sdk[aidlab_address].set_firmware_revision(data)
-        self.device_information['firmware_revision'] = data
+        self.aidlab_sdk[aidlab_address].did_receive_firmware_revision(data)
 
     def did_receive_raw_hardware_revision(self, data, aidlab_address):
-        self.aidlab_sdk[aidlab_address].set_hardware_revision(data)
-        self.device_information['hardware_revision'] = data
+        self.aidlab_sdk[aidlab_address].did_receive_hardware_revision(data)
 
     def did_receive_raw_manufacture_name(self, data, aidlab_address):
-        self.device_information['manufacture_name'] = data
+        self.aidlab_sdk[aidlab_address].did_receive_manufacture_name(data)
 
     def did_receive_raw_serial_number(self, data, aidlab_address):
-        self.device_information['serial_number'] = data
+        self.aidlab_sdk[aidlab_address].did_receive_serial_number(data)
 
     #-- Aidlab callbacks -----------------------------------------------
 
-    def did_connect_aidlab(self, aidlab_address):
+    def did_connect(self, aidlab):
         pass
 
-    def did_disconnect_aidlab(self, aidlab_address):
+    def did_disconnect(self, aidlab):
         pass
 
-    def push_up_callback(self, aidlab_address):
+    def did_receive_ecg(self, aidlab, timestamp, value):
+        """Called when a new ECG sample was received.
+        """
         pass
 
-    def sit_up_callback(self, aidlab_address):
+    def did_receive_respiration(self, aidlab, timestamp, value):
+        """Called when a new respiration sample was received.
+        """
         pass
 
-    def jump_callback(self, aidlab_address):
+    def did_receive_respiration_rate(self, aidlab, timestamp, value):
+        """Called when a new respiration sample was received.
+        """
         pass
 
-    def burpee_callback(self, aidlab_address):
+    def did_receive_battery_level(self, aidlab, state_of_charge):
+        """If battery monitoring is enabled, this event will notify about Aidlab's
+           state of charge. You never want Aidlab to run low on battery, as it can
+           lead to it's sudden turn off. Use this event to inform your users about
+           Aidlab's low energy.
+        """
         pass
 
-    def did_receive_ecg(self, value, timestamp, aidlab_address):
+    def did_receive_skin_temperature(self, aidlab, timestamp, value):
+        """Called when a skin temperature was received.
+        """
         pass
 
-    def did_receive_activity(self, activity, timestamp, aidlab_address):
+    def did_receive_accelerometer(self, aidlab, timestamp, ax, ay, az):
+        """Called when new accelerometer data were received.
+        """
         pass
 
-    def did_receive_respiration(self, value, timestamp, aidlab_address):
+    def did_receive_gyroscope(self, aidlab, timestamp, gx, gy, gz):
+        """Called when new gyroscope data were received.
+        """
         pass
 
-    def did_receive_battery_level(self, stateOfCharge, aidlab_address):
+    def did_receive_magnetometer(self, aidlab, timestamp, mx, my, mz):
+        """Called when new magnetometer data were received.
+        """
         pass
 
-    def did_receive_steps(self, steps, timestamp, aidlab_address):
+    def did_receive_orientation(self, aidlab, timestamp, roll, pitch, yaw):
+        """Called when received orientation, represented in RPY angles.
+        """
         pass
 
-    def did_receive_temperature(self, skin_temperature, timestamp, aidlab_address):
+    def did_receive_quaternion(self, aidlab, timestamp, qw, qx, qy, qz):
+        """Called when new quaternion data were received.
+        """
         pass
 
-    def did_receive_motion(self, qw, qx, qy, qz, ax, ay, az, timestamp, aidlab_address):
+    def did_receive_activity(self, aidlab, timestamp, activity):
+        """Called when activity data were received.
+        """
         pass
 
-    def did_receive_orientation(self, roll, pitch, yaw, timestamp, aidlab_address):
+    def did_receive_steps(self, aidlab, timestamp, steps):
+        """Called when total steps did change.
+        """
         pass
 
-    def did_receive_heart_rate(self, hrv, heartRate, timestamp, aidlab_address):
+    def did_receive_heart_rate(self, aidlab, timestamp, hrv, heartRate):
+        """Called when a heart rate did change.
+        """
         pass
 
-    def did_receive_respiration_rate(self, value, timestamp, aidlab_address):
+    def wear_state_did_change(self, aidlab, state):
+        """Called when a significant change of wear state did occur. You can use
+           that information to make decisions when to start processing data, or
+           display short user guide on how to wear Aidlab in your app.
+        """
         pass
 
-    def wear_state_did_change(self, state, aidlab_address):
+    def did_receive_sound_volume(self, aidlab, timestamp, sound_volume):
         pass
-    
-    def did_receive_sound_volume(self, sound_volume, timestamp, aidlab_address):
+
+    def did_detect_exercise(self, aidlab, exercise):
         pass
-    
-    
-    
- 
+

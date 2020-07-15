@@ -8,22 +8,22 @@ class MainManager(Aidlab):
         super().__init__()
         self.plot = Plot()
 
-    def did_connect_aidlab(self, aidlab_address):
-        print("Connected to: ", aidlab_address)
+    def did_connect(self, aidlab):
+        print("Connected to: ", aidlab.address)
 
-    def did_disconnect_aidlab(self, aidlab_address):
-        print("Disconnected from: ", aidlab_address)
+    def did_disconnect(self, aidlab):
+        print("Disconnected from: ", aidlab.address)
 
-    def did_receive_ecg(self, value, timestamp, aidlab_address):
+    def did_receive_ecg(self, aidlab, timestamp, value):
         self.plot.add(value)
 
 
 if __name__ == '__main__':
 
-    characteristics = ["ecg"]
+    signals = ["ecg"]
 
     main_manager = MainManager()
-    main_manager.connect(characteristics)
+    main_manager.connect(signals)
 
     while True:
         pass
