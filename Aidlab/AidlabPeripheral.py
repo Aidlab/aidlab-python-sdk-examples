@@ -84,10 +84,10 @@ class AidlabPeripheral():
             pass
 
     async def connect_to_aidlab(self, characteristics, aidlab_address, loop):
+
         async with BleakClient(aidlab_address, loop=loop) as client:
 
             self.aidlab_delegate.create_aidlabSDK(aidlab_address)
-            self.aidlab_delegate.did_connect_aidlab(aidlab_address)
 
             # Harvest Device Information
             self.aidlab_delegate.did_receive_raw_firmware_revision(
@@ -102,8 +102,9 @@ class AidlabPeripheral():
             self.aidlab_delegate.did_receive_raw_serial_number(
                 (await client.read_gatt_char("00002a25-0000-1000-8000-00805f9b34fb")).decode('ascii'), aidlab_address)
 
-            aidlabNotificationHandler = AidlabNotificationHandler(
-                aidlab_address,  self.aidlab_delegate)
+            self.aidlab_delegate.did_connect_aidlab(aidlab_address)
+
+            aidlabNotificationHandler = AidlabNotificationHandler(aidlab_address,  self.aidlab_delegate)
 
             for characteristic in characteristics:
                 await client.start_notify(self.converter_to_uuid(characteristic, aidlab_address), aidlabNotificationHandler.handle_notification)
@@ -132,13 +133,13 @@ class AidlabPeripheral():
             return AidlabCharacteristicsUUID.stepsUUID
         elif characteristic == "orientation":
             return AidlabCharacteristicsUUID.orientationUUID
-        elif characteristic == "heart_rate":
+        elif characteristic == "heartRate":
             return AidlabCharacteristicsUUID.heartRateUUID
-        elif characteristic == "health_thermometer":
+        elif characteristic == "healthThermometer":
             return AidlabCharacteristicsUUID.health_thermometerUUID
-        elif characteristic == "sound_volume":
+        elif characteristic == "soundVolume":
             return AidlabCharacteristicsUUID.sound_volumeUUID
 
-        print("Characteristic ", characteristic, " not supported")
+        print("Signal ", characteristic, " not supported")
         self.aidlab_delegate.did_disconnect_aidlab(aidlab_address)
         exit()

@@ -6,30 +6,30 @@ second_address = "<YOUR SECOND AIDLAB's ADDRESS>"
 
 class MainManager(Aidlab):
 
-    def is_connected(self, aidlab_address):
-        print("Connected to: ", aidlab_address)
+    def is_connected(self, aidlab):
+        print("Connected to: ", aidlab.address)
 
-    def is_disconnected(self, aidlab_address):
-        print("Disconnected from: ", aidlab_address)
+    def is_disconnected(self, aidlab):
+        print("Disconnected from: ", aidlab.address)
 
-    def did_receive_respiration(self, value, timestamp, aidlab_address):
+    def did_receive_respiration(self, aidlab, timestamp, value):
         if aidlab_address == first_address:
-            print("Respiration: ", value, aidlab_address)
+            print("Respiration: ", value, aidlab.address)
         elif aidlab_address == second_address:
-            print("Respiration: ", value, aidlab_address)
+            print("Respiration: ", value, aidlab.address)
 
-    def did_receive_battery_level(self, stateOfCharge, aidlab_address):
+    def did_receive_battery_level(self, aidlab, stateOfCharge):
         if aidlab_address == first_address:
-            print("Battery: ", stateOfCharge, aidlab_address)
+            print("Battery: ", stateOfCharge, aidlab.address)
         elif aidlab_address == second_address:
-            print("Battery: ", stateOfCharge, aidlab_address)
+            print("Battery: ", stateOfCharge, aidlab.address)
 
 if __name__ == '__main__':
 
-    characteristics = ["battery", "respiration"]
+    signals = ["battery", "respiration"]
 
     main_manager = MainManager()
-    main_manager.connect(characteristics)
+    main_manager.connect(signals)
 
     while True:
         pass

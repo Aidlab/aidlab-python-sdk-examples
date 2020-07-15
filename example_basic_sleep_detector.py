@@ -1,3 +1,5 @@
+# Basic Sleep Detector utilizing Aidlab's motion sensor
+
 from Aidlab.Aidlab import Aidlab
 from time import sleep, time
 from datetime import datetime
@@ -9,13 +11,13 @@ class MainManager(Aidlab):
         self.startTimeOfSleepingPosition = 0
         self.isInSleepingPosition = False
 
-    def did_connect_aidlab(self, aidlab_address):
-        print("Connected to: ", aidlab_address)
+    def did_connect(self, aidlab):
+        print("Connected to: ", aidlab.address)
 
-    def did_disconnect_aidlab(self, aidlab_address):
-        print("Disconnected from: ", aidlab_address)
+    def did_disconnect(self, aidlab):
+        print("Disconnected from: ", aidlab.address)
 
-    def did_receive_motion(self, qw, qx, qy, qz, ax, ay, az, timestamp, aidlab_address):
+    def did_receive_quaternion(self, aidlab, timestamp, qw, qx, qy, qz):
         self.naiveSleepDetector([qw, qx, qy, qz])
 
     def naiveSleepDetector(self, value):
@@ -74,10 +76,10 @@ class MainManager(Aidlab):
 
 if __name__ == '__main__':
 
-    characteristics = ["motion"]
+    signals = ["orientation"]
 
     main_manager = MainManager()
-    main_manager.connect(characteristics)
+    main_manager.connect(signals)
 
     while True:
         pass

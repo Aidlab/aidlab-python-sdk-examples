@@ -34,13 +34,13 @@ class MainManager(Aidlab):
         self.sample_index = 0
         self.skip = 0
 
-    def did_connect_aidlab(self, aidlab_address):
-        print("Connected to: ", aidlab_address)
+    def did_connect(self, aidlab):
+        print("Connected to: ", aidlab.address)
 
-    def did_disconnect_aidlab(self, aidlab_address):
-        print("Disconnected from: ", aidlab_address)
+    def did_disconnect(self, aidlab):
+        print("Disconnected from: ", aidlab.address)
 
-    def did_receive_ecg(self, value, timestamp, aidlab_address):
+    def did_receive_ecg(self, aidlab, timestamp, value):
         self.skip += 1
         if self.skip % 12 == 0:
             global result, buffer_size
@@ -53,10 +53,10 @@ if __name__ == '__main__':
     result = Array('d', buffer_size)
     Process(target=chart, args=(result,)).start()
 
-    characteristics = ["ecg"]
+    signals = ["ecg"]
 
     main_manager = MainManager()
-    main_manager.connect(characteristics)
+    main_manager.connect(signals)
 
     # Start the connection
     while True:

@@ -3,27 +3,20 @@ from Aidlab.Aidlab import Aidlab
 
 class WorkoutDetector(Aidlab):
 
-    def did_connect_aidlab(self, aidlab_address):
-        print("Connected to: ", aidlab_address)
+    def did_connect(self, aidlab):
+        print("Connected to: ", aidlab.address)
 
-    def did_detect_push_up(self, aidlab_address):
-        print("push-up", aidlab_address)
+    def did_disconnect(self, aidlab):
+        print("Disconnected from: ", aidlab.address)
 
-    def did_detect_jump(self, aidlab_address):
-        print("jump ", aidlab_address)
-
-    def did_detect_sit_up(self, aidlab_address):
-        print("situp", aidlab_address)
-
-    def did_detect_burpee(self, aidlab_address):
-        print("burpee", aidlab_address)
-
-
+    def did_detect_exercise(self, aidlab, exercise):
+        print(exercise)
+        
 if __name__ == '__main__':
 
-    characteristics = ["motion"]
+    signals = ["motion", "orientation"]
     workout_detector = WorkoutDetector()
-    workout_detector.connect(characteristics)
+    workout_detector.connect(signals)
 
     while True:
         pass
