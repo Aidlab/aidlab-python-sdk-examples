@@ -1,7 +1,6 @@
-from Aidlab.Aidlab import Aidlab
+import Aidlab
 
-
-class MotionDetector(Aidlab):
+class MotionDetector(Aidlab.Aidlab):
 
     def did_connect(self, aidlab):
         print("Connected to: ", aidlab.address)
@@ -23,9 +22,6 @@ class MotionDetector(Aidlab):
 
     def did_receive_quaternion(self, aidlab, timestamp, qw, qx, qy, qz):
         print("Quat:", qw, qx, qy, qz)
-
-    def onExerciseDetected(self, aidlab, exercise):
-        pass
         
 if __name__ == '__main__':
 

@@ -1,7 +1,6 @@
-from Aidlab.Aidlab import Aidlab
+import Aidlab
 
-
-class WorkoutDetector(Aidlab):
+class WorkoutDetector(Aidlab.Aidlab):
 
     def did_connect(self, aidlab):
         print("Connected to: ", aidlab.address)

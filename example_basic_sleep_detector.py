@@ -1,10 +1,10 @@
 # Basic Sleep Detector utilizing Aidlab's motion sensor
 
-from Aidlab.Aidlab import Aidlab
+import Aidlab
 from time import sleep, time
 from datetime import datetime
 
-class MainManager(Aidlab):
+class MainManager(Aidlab.Aidlab):
 
     def __init__(self):
         super().__init__()

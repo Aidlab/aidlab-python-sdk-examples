@@ -1,8 +1,7 @@
-from Aidlab.Aidlab import Aidlab
-from Aidlab.Plot import Plot
+import Aidlab
+from Plot import Plot
 
-
-class MainManager(Aidlab):
+class MainManager(Aidlab.Aidlab):
 
     def __init__(self):
         super().__init__()
@@ -14,8 +13,8 @@ class MainManager(Aidlab):
     def did_disconnect(self, aidlab):
         print("Disconnected from: ", aidlab.address)
 
-    def did_receive_ecg(self, aidlab, timestamp, value):
-        self.plot.add(value)
+    def did_receive_ecg(self, aidlab, timestamp, values):
+        self.plot.add(values[0])
 
 
 if __name__ == '__main__':

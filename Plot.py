@@ -7,14 +7,17 @@ import numpy as np
 import time
 
 # Uncomment if you encounter any problems with plotting
-# import matplotlib
-# matplotlib.use('TkAgg')
+from sys import platform
+
+if platform == "darwin":
+    import matplotlib
+    matplotlib.use('TkAgg')
 
 import matplotlib.pyplot as pyplot
 
 second_in_milliseconds = 1000
 # The bigger the buffer, the more we see
-buffer_size = 1000
+buffer_size = 500
 
 
 class Plot:
@@ -25,7 +28,6 @@ class Plot:
         self.line = []
         self.time = self.current_time_in_milliseconds()
         self.sample_index = 0
-        self.skip = 0
 
     def live_plotter(self):
 
@@ -52,19 +54,14 @@ class Plot:
         self.fig.canvas.flush_events()
 
     def add(self, value):
-        self.skip += 1
 
-        if self.skip % 6 == 0:
-            self.sample_index += 1
+        chart_refresh_rate_in_milliseconds = 200
+        self.y[self.sample_index % buffer_size] = value
+        self.sample_index += 1
 
-            chart_refresh_rate_in_milliseconds = 100
-            # shift left
-            self.y[:-1] = self.y[1:]
-            self.y[-1] = value
-
-            if self.current_time_in_milliseconds() - self.time > chart_refresh_rate_in_milliseconds:
-                self.time = self.current_time_in_milliseconds()
-                self.live_plotter()
+        if self.current_time_in_milliseconds() - self.time > chart_refresh_rate_in_milliseconds:
+            self.time = self.current_time_in_milliseconds()
+            self.live_plotter()
 
     def current_time_in_milliseconds(self):
         global second_in_milliseconds

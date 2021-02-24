@@ -1,10 +1,10 @@
-from Aidlab.Aidlab import Aidlab
+import Aidlab
 
 first_address = "<YOUR FIRST AIDLAB's ADDRESS>"
 second_address = "<YOUR SECOND AIDLAB's ADDRESS>"
 
 
-class MainManager(Aidlab):
+class MainManager(Aidlab.Aidlab):
 
     def is_connected(self, aidlab):
         print("Connected to: ", aidlab.address)
@@ -12,11 +12,11 @@ class MainManager(Aidlab):
     def is_disconnected(self, aidlab):
         print("Disconnected from: ", aidlab.address)
 
-    def did_receive_respiration(self, aidlab, timestamp, value):
+    def did_receive_respiration(self, aidlab, timestamp, values):
         if aidlab_address == first_address:
-            print("Respiration: ", value, aidlab.address)
+            print("Respiration: ", values, aidlab.address)
         elif aidlab_address == second_address:
-            print("Respiration: ", value, aidlab.address)
+            print("Respiration: ", values, aidlab.address)
 
     def did_receive_battery_level(self, aidlab, stateOfCharge):
         if aidlab_address == first_address:

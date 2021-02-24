@@ -1,4 +1,4 @@
-from Aidlab.Aidlab import Aidlab
+import Aidlab
 import numpy as np
 from multiprocessing import Process, Queue, Array
 import matplotlib.pyplot as pyplot
@@ -27,12 +27,11 @@ def chart(result):
     pyplot.show()
 
 
-class MainManager(Aidlab):
+class MainManager(Aidlab.Aidlab):
 
     def __init__(self):
         super().__init__()
         self.sample_index = 0
-        self.skip = 0
 
     def did_connect(self, aidlab):
         print("Connected to: ", aidlab.address)
@@ -40,12 +39,10 @@ class MainManager(Aidlab):
     def did_disconnect(self, aidlab):
         print("Disconnected from: ", aidlab.address)
 
-    def did_receive_ecg(self, aidlab, timestamp, value):
-        self.skip += 1
-        if self.skip % 12 == 0:
-            global result, buffer_size
-            self.sample_index += 1
-            result[self.sample_index % buffer_size] = value
+    def did_receive_ecg(self, aidlab, timestamp, values):
+        global result, buffer_size
+        self.sample_index += 1
+        result[self.sample_index % buffer_size] = values[0]
 
 
 if __name__ == '__main__':
