@@ -1,4 +1,5 @@
 import Aidlab
+from Aidlab.Signal import Signal
 
 class MainManager(Aidlab.Aidlab):
 
@@ -13,7 +14,7 @@ class MainManager(Aidlab.Aidlab):
 
 
 if __name__ == '__main__':
-    signals = ["respiration"]
+    signals = [Signal.respiration]
 
     main_manager = MainManager()
     main_manager.connect(signals)

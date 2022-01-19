@@ -1,6 +1,7 @@
 # Basic Sleep Detector utilizing Aidlab's motion sensor
 
 import Aidlab
+from Aidlab.Signal import Signal
 from time import sleep, time
 from datetime import datetime
 
@@ -76,7 +77,7 @@ class MainManager(Aidlab.Aidlab):
 
 if __name__ == '__main__':
 
-    signals = ["orientation"]
+    signals = [Signal.orientation]
 
     main_manager = MainManager()
     main_manager.connect(signals)

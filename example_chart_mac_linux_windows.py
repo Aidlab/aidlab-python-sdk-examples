@@ -1,4 +1,5 @@
 import Aidlab
+from Aidlab.Signal import Signal
 from Plot import Plot
 
 class MainManager(Aidlab.Aidlab):
@@ -19,7 +20,7 @@ class MainManager(Aidlab.Aidlab):
 
 if __name__ == '__main__':
 
-    signals = ["ecg"]
+    signals = [Signal.ecg]
 
     main_manager = MainManager()
     main_manager.connect(signals)

@@ -1,4 +1,5 @@
 import Aidlab
+from Aidlab.Signal import Signal
 import numpy as np
 from multiprocessing import Process, Queue, Array
 import matplotlib.pyplot as pyplot
@@ -50,7 +51,7 @@ if __name__ == '__main__':
     result = Array('d', buffer_size)
     Process(target=chart, args=(result,)).start()
 
-    signals = ["ecg"]
+    signals = [Signal.ecg]
 
     main_manager = MainManager()
     main_manager.connect(signals)

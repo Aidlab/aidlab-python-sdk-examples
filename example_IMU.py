@@ -1,4 +1,5 @@
 import Aidlab
+from Aidlab.Signal import Signal
 
 class MotionDetector(Aidlab.Aidlab):
 
@@ -25,7 +26,7 @@ class MotionDetector(Aidlab.Aidlab):
         
 if __name__ == '__main__':
 
-    signals = ["motion", "orientation"]
+    signals = [Signal.motion, Signal.orientation]
     motion_detector = MotionDetector()
     motion_detector.connect(signals)
 
