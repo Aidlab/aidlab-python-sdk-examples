@@ -1,4 +1,5 @@
 import Aidlab
+from Aidlab.Signal import Signal
 
 class MainManager(Aidlab.Aidlab):
 

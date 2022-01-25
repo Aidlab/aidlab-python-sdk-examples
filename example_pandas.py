@@ -1,5 +1,8 @@
 import Aidlab
+from Aidlab.Signal import Signal
 import pandas as pd
+
+PATH = "YOUR PATH"
 
 class MainManager(Aidlab.Aidlab):
 
@@ -11,7 +14,7 @@ class MainManager(Aidlab.Aidlab):
         print("Disconnected from: ", aidlab.address)
 
         df = pd.DataFrame(self.signals_data, columns= ["Ecg"])
-        df.to_csv ("YOUR PATH/filename.csv", index = False, header=True)
+        df.to_csv (PATH+ "/filename.csv", index = False, header=True)
         
     def did_receive_ecg(self, aidlab, timestamp, values):
         for value in values:
@@ -19,7 +22,7 @@ class MainManager(Aidlab.Aidlab):
         
 if __name__ == '__main__':
 
-    signals = ["ecg"]
+    signals = [Signal.ecg]
     main_manager = MainManager()
     main_manager.connect(signals)
 

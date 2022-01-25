@@ -1,4 +1,5 @@
 import Aidlab
+from Aidlab.Signal import Signal
 
 class WorkoutDetector(Aidlab.Aidlab):
 
@@ -13,7 +14,7 @@ class WorkoutDetector(Aidlab.Aidlab):
         
 if __name__ == '__main__':
 
-    signals = ["motion", "orientation"]
+    signals = [Signal.motion, Signal.orientation]
     workout_detector = WorkoutDetector()
     workout_detector.connect(signals)
 
