@@ -1,45 +1,43 @@
 #
-# Plot.py
-# Aidlab-SDK
-# Created by Szymon Gesicki on 10.05.2020.
-#
-import numpy as np
-import time
 
-# Uncomment if you encounter any problems with plotting
+# Plot.py
+
+# Aidlab-SDK
+
+# Created by Szymon Gesicki on 10.05.2020.
+
+#
+
 from sys import platform
 
 if platform == "darwin":
+
     import matplotlib
+
     matplotlib.use('TkAgg')
 
+import numpy as np
+import time
 import matplotlib.pyplot as pyplot
 
-second_in_milliseconds = 1000
-# The bigger the buffer, the more we see
-buffer_size = 500
-
+buffer_size = 750
 
 class Plot:
-
     def __init__(self):
-        self.x = [i for i in range(buffer_size)]
         self.y = [0] * buffer_size
         self.line = []
-        self.time = self.current_time_in_milliseconds()
+        self.time = time.time() * 1000
         self.sample_index = 0
 
     def live_plotter(self):
-
         if self.line == []:
-
             # This is the call to matplotlib that allows dynamic plotting
             pyplot.ion()
             self.fig = pyplot.figure(figsize=(13, 6))
             axis = self.fig.add_subplot(111)
 
             # Create a variable for the line so we can later update it
-            self.line, = axis.plot(self.x, self.y, '', alpha=0.8)
+            self.line, = axis.plot(self.y, '', alpha=0.8)
             pyplot.show()
 
         # After the figure, axis, and line are created, we only need to update the
@@ -54,15 +52,9 @@ class Plot:
         self.fig.canvas.flush_events()
 
     def add(self, value):
-
-        chart_refresh_rate_in_milliseconds = 200
-        self.y[self.sample_index % buffer_size] = value
+        self.y = self.y[1:] + [value]  # shift values in the buffer and append new one
         self.sample_index += 1
 
-        if self.current_time_in_milliseconds() - self.time > chart_refresh_rate_in_milliseconds:
-            self.time = self.current_time_in_milliseconds()
+        if time.time() * 1000 - self.time > 200:
+            self.time = time.time() * 1000
             self.live_plotter()
-
-    def current_time_in_milliseconds(self):
-        global second_in_milliseconds
-        return int(round(time.time() * second_in_milliseconds))

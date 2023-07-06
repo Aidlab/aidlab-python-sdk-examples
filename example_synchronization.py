@@ -13,8 +13,8 @@ class MainManager(Aidlab.Aidlab):
     def sync_state_did_change(self, aidlab, sync_state):
         print(sync_state)
 
-    def did_receive_unsynchronized_size(self, aidlab, unsynchronized_size):
-        print(unsynchronized_size)
+    def did_receive_unsynchronized_size(self, aidlab, unsynchronized_size, sync_bytes_per_second):
+        print(f" size:{unsynchronized_size} ({sync_bytes_per_second:.1f}B/s)")
 
     def did_receive_past_ecg(self, aidlab, timestamp, values):
         pass
