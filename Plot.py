@@ -1,20 +1,8 @@
 #
-
 # Plot.py
-
 # Aidlab-SDK
-
 # Created by Szymon Gesicki on 10.05.2020.
-
 #
-
-from sys import platform
-
-if platform == "darwin":
-
-    import matplotlib
-
-    matplotlib.use('TkAgg')
 
 import numpy as np
 import time
