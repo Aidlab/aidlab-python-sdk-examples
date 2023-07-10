@@ -7,6 +7,13 @@
 import numpy as np
 import time
 import matplotlib.pyplot as pyplot
+import platform
+
+if platform.system() == 'Darwin':
+    # For older mac versions
+    if int(platform.release().split('.')[0]) <= 20:
+        import matplotlib
+        matplotlib.use('TkAgg')
 
 buffer_size = 750
 

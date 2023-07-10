@@ -7,10 +7,10 @@ second_address = "<YOUR SECOND AIDLAB's ADDRESS>"
 
 class MainManager(Aidlab.Aidlab):
 
-    def is_connected(self, aidlab):
+    def did_connect(self, aidlab):
         print("Connected to: ", aidlab.address)
 
-    def is_disconnected(self, aidlab):
+    def did_disconnect(self, aidlab):
         print("Disconnected from: ", aidlab.address)
 
     def did_receive_respiration(self, aidlab, timestamp, values):
@@ -26,11 +26,7 @@ class MainManager(Aidlab.Aidlab):
             print("Battery: ", state_of_charge, aidlab.address)
 
 if __name__ == '__main__':
-
     signals = [Signal.battery, Signal.respiration]
-
+    
     main_manager = MainManager()
     main_manager.connect(signals)
-
-    while True:
-        pass
