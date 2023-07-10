@@ -13,10 +13,7 @@ class WorkoutDetector(Aidlab.Aidlab):
         print(exercise)
         
 if __name__ == '__main__':
-
     signals = [Signal.motion, Signal.orientation]
+    
     workout_detector = WorkoutDetector()
     workout_detector.connect(signals)
-
-    while True:
-        pass

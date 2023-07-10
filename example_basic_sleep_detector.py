@@ -76,14 +76,7 @@ class MainManager(Aidlab.Aidlab):
 
 
 if __name__ == '__main__':
-
     signals = [Signal.orientation]
 
     main_manager = MainManager()
     main_manager.connect(signals)
-
-    while True:
-        pass
-
-
-

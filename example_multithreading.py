@@ -1,5 +1,7 @@
 import Aidlab
 from Aidlab.Signal import Signal
+import threading
+import time
 
 class MainManager(Aidlab.Aidlab):
 
@@ -17,4 +19,13 @@ if __name__ == '__main__':
     signals = [Signal.respiration]
 
     main_manager = MainManager()
-    main_manager.connect(signals)
+
+    def connect():
+        main_manager.connect(signals)
+
+    thread = threading.Thread(target=connect)
+    thread.start()
+
+    while True:
+        print("Doing things main thread...")
+        time.sleep(5)

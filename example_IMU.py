@@ -25,10 +25,7 @@ class MotionDetector(Aidlab.Aidlab):
         print("Quat:", qw, qx, qy, qz)
         
 if __name__ == '__main__':
-
     signals = [Signal.motion, Signal.orientation]
+    
     motion_detector = MotionDetector()
     motion_detector.connect(signals)
-
-    while True:
-        pass
