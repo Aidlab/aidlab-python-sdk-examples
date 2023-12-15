@@ -1,7 +1,7 @@
-import Aidlab
-from Aidlab.Signal import Signal
+from AidlabSDK import AidlabSDK
+from AidlabSDK import Signal
 
-class WorkoutDetector(Aidlab.Aidlab):
+class WorkoutDetector(AidlabSDK):
 
     def did_connect(self, aidlab):
         print("Connected to: ", aidlab.address)

@@ -1,8 +1,8 @@
-import Aidlab
-from Aidlab.Signal import Signal
+from AidlabSDK import AidlabSDK
+from AidlabSDK import Signal
 from Plot import Plot
 
-class MainManager(Aidlab.Aidlab):
+class MainManager(AidlabSDK):
 
     def __init__(self):
         super().__init__()

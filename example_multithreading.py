@@ -1,9 +1,9 @@
-import Aidlab
-from Aidlab.Signal import Signal
+from AidlabSDK import AidlabSDK
+from AidlabSDK import Signal
 import threading
 import time
 
-class MainManager(Aidlab.Aidlab):
+class MainManager(AidlabSDK):
 
     def did_connect(self, aidlab):
         print("Connected to: ", aidlab.address)

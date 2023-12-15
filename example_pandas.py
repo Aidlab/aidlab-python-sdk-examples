@@ -1,11 +1,11 @@
-import Aidlab
-from Aidlab.Signal import Signal
+from AidlabSDK import AidlabSDK
+from AidlabSDK import Signal
 import pandas as pd
 
 PATH = "./"
 filename = "output.csv"
 
-class MainManager(Aidlab.Aidlab):
+class MainManager(AidlabSDK):
 
     def __init__(self):
         super().__init__()

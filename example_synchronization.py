@@ -1,7 +1,6 @@
-import Aidlab
-from Aidlab.Signal import Signal
+from AidlabSDK import AidlabSDK
 
-class MainManager(Aidlab.Aidlab):
+class MainManager(AidlabSDK):
 
     def did_connect(self, aidlab):
         print("Connected to: ", aidlab.address)
