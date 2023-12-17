@@ -15,7 +15,7 @@ class MainManager(DeviceDelegate):
     async def run(self):
         devices = await AidlabManager().scan()
         if len(devices) > 0:
-            print("Connecting to: ", devices[0].address)
+            print("Connecting to:", devices[0].address)
             await devices[0].connect(self, [DataType.ORIENTATION])
             while True:
                 await asyncio.sleep(1)
@@ -26,8 +26,8 @@ class MainManager(DeviceDelegate):
     def did_disconnect(self, device):
         print("Disconnected from: ", device.address)
 
-    def did_receive_quaternion(self, _, __, q_w, q_x, q_y, q_z):
-        self.naive_sleep_detector([q_w, q_x, q_y, q_z])
+    def did_receive_quaternion(self, _, __, qw, qx, qy, qz):
+        self.naive_sleep_detector([qw, qx, qy, qz])
 
     def naive_sleep_detector(self, value):
 
