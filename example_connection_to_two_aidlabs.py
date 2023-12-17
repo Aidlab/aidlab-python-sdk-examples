@@ -1,32 +1,36 @@
-from AidlabSDK import AidlabSDK
-from AidlabSDK import Signal
+import asyncio
+from aidlab import AidlabManager, DataType, DeviceDelegate
 
-first_address = "<YOUR FIRST AIDLAB's ADDRESS>"
-second_address = "<YOUR SECOND AIDLAB's ADDRESS>"
+FIRST_ADDRESS = "<YOUR FIRST DEVICE's ADDRESS>"
+SECOND_ADDRESS = "<YOUR SECOND DEVICE's ADDRESS>"
 
+class MainManager(DeviceDelegate):
+    """Main class for managing devices."""
 
-class MainManager(AidlabSDK):
+    async def run(self):
+        devices = await AidlabManager().scan()
+        if len(devices) > 0:
+            first_device = next((device for device in devices if device.address == FIRST_ADDRESS), None)
+            if first_device is not None:
+                await devices[0].connect(self, [DataType.RESPIRATION])
 
-    def did_connect(self, aidlab):
-        print("Connected to: ", aidlab.address)
+            second_device = next((device for device in devices if device.address == SECOND_ADDRESS), None)
+            if second_device is not None:
+                await devices[1].connect(self, [DataType.RESPIRATION])
 
-    def did_disconnect(self, aidlab):
-        print("Disconnected from: ", aidlab.address)
+            while True:
+                await asyncio.sleep(1)
 
-    def did_receive_respiration(self, aidlab, timestamp, values):
-        if aidlab.address == first_address:
-            print("Respiration: ", values, aidlab.address)
-        elif aidlab.address == second_address:
-            print("Respiration: ", values, aidlab.address)
+    def did_connect(self, device):
+        print("Connected to: ", device.address)
 
-    def did_receive_battery_level(self, aidlab, state_of_charge):
-        if aidlab.address == first_address:
-            print("Battery: ", state_of_charge, aidlab.address)
-        elif aidlab.address == second_address:
-            print("Battery: ", state_of_charge, aidlab.address)
+    def did_disconnect(self, device):
+        print("Disconnected from: ", device.address)
 
-if __name__ == '__main__':
-    signals = [Signal.battery, Signal.respiration]
-    
-    main_manager = MainManager()
-    main_manager.connect(signals)
+    def did_receive_respiration(self, device, _, values):
+        if device.address == FIRST_ADDRESS:
+            print("Respiration: ", values, device.address)
+        elif device.address == SECOND_ADDRESS:
+            print("Respiration: ", values, device.address)
+
+asyncio.run(MainManager().run())

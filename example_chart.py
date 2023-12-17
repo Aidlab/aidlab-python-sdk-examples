@@ -1,15 +1,21 @@
-from AidlabSDK import AidlabSDK
-from AidlabSDK import Signal
+import asyncio
+from aidlab import AidlabManager, DataType, DeviceDelegate
 from Plot import Plot
 
-class MainManager(AidlabSDK):
-
+class MainManager(DeviceDelegate):
     def __init__(self):
-        super().__init__()
         self.plot = Plot()
 
+    async def run(self):
+        devices = await AidlabManager().scan()
+        if len(devices) > 0:
+            await devices[0].connect(self, [DataType.ECG])
+            while True:
+                await asyncio.sleep(1)
+
     def did_connect(self, aidlab):
-        print("Connected to: ", aidlab.address)
+        print("Connected to: %s. You need to wear device to see samples.", aidlab.address)
+        self.plot.add(0)
 
     def did_disconnect(self, aidlab):
         print("Disconnected from: ", aidlab.address)
@@ -17,9 +23,4 @@ class MainManager(AidlabSDK):
     def did_receive_ecg(self, aidlab, timestamp, values):
         self.plot.add(values[0])
 
-
-if __name__ == '__main__':
-    signals = [Signal.ecg]
-
-    main_manager = MainManager()
-    main_manager.connect(signals)
+asyncio.run(MainManager().run())

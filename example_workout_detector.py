@@ -1,19 +1,23 @@
-from AidlabSDK import AidlabSDK
-from AidlabSDK import Signal
+import asyncio
+from aidlab import AidlabManager, DataType, DeviceDelegate
 
-class WorkoutDetector(AidlabSDK):
+class MainManager(DeviceDelegate):
 
-    def did_connect(self, aidlab):
-        print("Connected to: ", aidlab.address)
+    async def run(self):
+        devices = await AidlabManager().scan()
+        if len(devices) > 0:
+            print("Connecting to: ", devices[0].address)
+            await devices[0].connect(self, [DataType.motion, DataType.orientation])
+            while True:
+                await asyncio.sleep(1)
 
-    def did_disconnect(self, aidlab):
-        print("Disconnected from: ", aidlab.address)
+    def did_connect(self, device):
+        print("Connected to: ", device.address)
 
-    def did_detect_exercise(self, aidlab, exercise):
+    def did_disconnect(self, device):
+        print("Disconnected from: ", device.address)
+
+    def did_detect_exercise(self, _, exercise):
         print(exercise)
-        
-if __name__ == '__main__':
-    signals = [Signal.motion, Signal.orientation]
-    
-    workout_detector = WorkoutDetector()
-    workout_detector.connect(signals)
+
+asyncio.run(MainManager().run())

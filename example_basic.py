@@ -1,20 +1,24 @@
-from AidlabSDK import AidlabSDK
-from AidlabSDK import Signal
+import logging
+import asyncio
 
-class MainManager(AidlabSDK):
+from aidlab import AidlabManager, DataType, DeviceDelegate
 
-    def did_connect(self, aidlab):
-        print("Connected to: ", aidlab.address)
+class MainManager(DeviceDelegate):
+    async def run(self):
+        devices = await AidlabManager().scan()
+        if len(devices) > 0:
+            print("Connecting to: ", devices[0].address)
+            await devices[0].connect(self, [DataType.RESPIRATION])
+            while True:
+                await asyncio.sleep(1)
 
-    def did_disconnect(self, aidlab):
-        print("Disconnected from: ", aidlab.address)
+    def did_connect(self, device):
+        print("Connected to: ", device.address)
 
-    def did_receive_respiration(self, aidlab, timestamp, values):
+    def did_disconnect(self, device):
+        print("Disconnected from: ", device.address)
+
+    def did_receive_respiration(self, device, timestamp: int, values: list[float]):
         print(values)
 
-
-if __name__ == '__main__':
-    signals = [Signal.respiration]
-
-    main_manager = MainManager()
-    main_manager.connect(signals)
+asyncio.run(MainManager().run())
