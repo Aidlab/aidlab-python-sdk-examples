@@ -8,12 +8,13 @@ class MainManager(DeviceDelegate):
         devices = await AidlabManager().scan()
         if len(devices) > 0:
             print("Connecting to:", devices[0].address)
-            await devices[0].connect(self, [DataType.MOTION, DataType.ORIENTATION])
+            await devices[0].connect(self)
             while True:
                 await asyncio.sleep(1)
 
-    def did_connect(self, device):
+    async def did_connect(self, device):
         print("Connected to:", device.address)
+        await device.collect([DataType.MOTION, DataType.ORIENTATION], [])
 
     def did_disconnect(self, device):
         print("Disconnected from:", device.address)

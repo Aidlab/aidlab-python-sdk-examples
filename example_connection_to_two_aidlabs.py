@@ -11,18 +11,23 @@ class MainManager(DeviceDelegate):
         devices = await AidlabManager().scan()
         if len(devices) > 0:
             first_device = next((device for device in devices if device.address == FIRST_ADDRESS), None)
-            if first_device is not None:
-                await devices[0].connect(self, [DataType.RESPIRATION])
-
             second_device = next((device for device in devices if device.address == SECOND_ADDRESS), None)
+            
+            if first_device is not None:
+                await first_device.connect(self)
+
             if second_device is not None:
-                await devices[1].connect(self, [DataType.RESPIRATION])
+                await second_device.connect(self)
 
             while True:
                 await asyncio.sleep(1)
 
-    def did_connect(self, device):
+    async def did_connect(self, device):
         print("Connected to: ", device.address)
+        if device.address == FIRST_ADDRESS:
+            await device.collect([DataType.RESPIRATION], [])
+        elif device.address == SECOND_ADDRESS:
+            await device.collect([DataType.RESPIRATION], [])
 
     def did_disconnect(self, device):
         print("Disconnected from: ", device.address)

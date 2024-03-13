@@ -9,18 +9,19 @@ class MainManager(DeviceDelegate):
     async def run(self):
         devices = await AidlabManager().scan()
         if len(devices) > 0:
-            await devices[0].connect(self, [DataType.ECG])
+            await devices[0].connect(self)
             while True:
                 await asyncio.sleep(1)
 
-    def did_connect(self, aidlab):
-        print("Connected to: %s. You need to wear device to see samples.", aidlab.address)
+    async def did_connect(self, device):
+        print("Connected to: %s. You need to wear device to see samples.", device.address)
+        await device.collect([DataType.ECG], [])
         self.plot.add(0)
 
-    def did_disconnect(self, aidlab):
-        print("Disconnected from: ", aidlab.address)
+    def did_disconnect(self, device):
+        print("Disconnected from: ", device.address)
 
-    def did_receive_ecg(self, aidlab, timestamp, values):
+    def did_receive_ecg(self, device, timestamp, values):
         self.plot.add(values[0])
 
 asyncio.run(MainManager().run())
