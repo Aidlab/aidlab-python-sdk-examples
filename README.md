@@ -1,4 +1,4 @@
-# aidlabsdk-python-examples
+# Aidlab Python SDK Examples
 
 This repository contains code examples for the [Aidlab Python SDK](https://www.aidlab.com/developer), designed to help developers integrate and utilize the Aidlab SDK in their Python applications more effectively.
 
