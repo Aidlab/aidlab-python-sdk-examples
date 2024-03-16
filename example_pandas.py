@@ -28,13 +28,13 @@ class MainManager(DeviceDelegate):
         print("Disconnected from:", device.address)
         self.save_to_csv()
         
-    def did_receive_ecg(self, _, timestamp, values):
+    def did_receive_ecg(self, _, timestamp, value):
         self.signals_data_ecg["timestamp"].append(timestamp)
-        self.signals_data_ecg["ecg"].append(values[0])
+        self.signals_data_ecg["ecg"].append(value)
 
-    def did_receive_respiration(self, _, timestamp, values):
+    def did_receive_respiration(self, _, timestamp, value):
         self.signals_data_respiration["timestamp"].append(timestamp)
-        self.signals_data_respiration["respiration"].append(values[0])
+        self.signals_data_respiration["respiration"].append(value)
 
     def save_to_csv(self):
         df_ecg = pd.DataFrame(self.signals_data_ecg)

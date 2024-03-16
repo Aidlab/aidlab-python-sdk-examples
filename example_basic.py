@@ -18,7 +18,7 @@ class MainManager(DeviceDelegate):
     def did_disconnect(self, device):
         print("Disconnected from:", device.address)
 
-    def did_receive_respiration(self, device, timestamp: int, values: list[float]):
-        print(values)
+    def did_receive_respiration(self, device, timestamp: int, value: float):
+        print(value)
 
 asyncio.run(MainManager().run())

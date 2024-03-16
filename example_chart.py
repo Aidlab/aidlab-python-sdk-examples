@@ -21,7 +21,7 @@ class MainManager(DeviceDelegate):
     def did_disconnect(self, device):
         print("Disconnected from: ", device.address)
 
-    def did_receive_ecg(self, device, timestamp, values):
-        self.plot.add(values[0])
+    def did_receive_ecg(self, device, timestamp, value):
+        self.plot.add(value)
 
 asyncio.run(MainManager().run())

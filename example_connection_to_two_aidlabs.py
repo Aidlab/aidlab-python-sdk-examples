@@ -32,10 +32,10 @@ class MainManager(DeviceDelegate):
     def did_disconnect(self, device):
         print("Disconnected from: ", device.address)
 
-    def did_receive_respiration(self, device, _, values):
+    def did_receive_respiration(self, device, _, value):
         if device.address == FIRST_ADDRESS:
-            print("Respiration: ", values, device.address)
+            print("Respiration: ", value, device.address)
         elif device.address == SECOND_ADDRESS:
-            print("Respiration: ", values, device.address)
+            print("Respiration: ", value, device.address)
 
 asyncio.run(MainManager().run())
