@@ -1,5 +1,6 @@
 import asyncio
-from aidlab import AidlabManager, DataType, DeviceDelegate
+
+from aidlab import AidlabManager, DataType, Device, DeviceDelegate, DisconnectReason
 
 FIRST_ADDRESS = "<YOUR FIRST DEVICE's ADDRESS>"
 SECOND_ADDRESS = "<YOUR SECOND DEVICE's ADDRESS>"
@@ -12,7 +13,7 @@ class MainManager(DeviceDelegate):
         if len(devices) > 0:
             first_device = next((device for device in devices if device.address == FIRST_ADDRESS), None)
             second_device = next((device for device in devices if device.address == SECOND_ADDRESS), None)
-            
+
             if first_device is not None:
                 await first_device.connect(self)
 
@@ -22,20 +23,16 @@ class MainManager(DeviceDelegate):
             while True:
                 await asyncio.sleep(1)
 
-    async def did_connect(self, device):
+    def did_connect(self, device: Device):
         print("Connected to: ", device.address)
-        if device.address == FIRST_ADDRESS:
-            await device.collect([DataType.RESPIRATION], [])
-        elif device.address == SECOND_ADDRESS:
-            await device.collect([DataType.RESPIRATION], [])
+        if device.address == FIRST_ADDRESS or device.address == SECOND_ADDRESS:
+            asyncio.create_task(device.collect([DataType.RESPIRATION], []))
 
-    def did_disconnect(self, device):
-        print("Disconnected from: ", device.address)
+    def did_disconnect(self, device: Device, reason: DisconnectReason):
+        print("Disconnected from: ", device.address, reason)
 
-    def did_receive_respiration(self, device, _, value):
-        if device.address == FIRST_ADDRESS:
-            print("Respiration: ", value, device.address)
-        elif device.address == SECOND_ADDRESS:
+    def did_receive_respiration(self, device: Device, _: int, value: float):
+        if device.address == FIRST_ADDRESS or device.address == SECOND_ADDRESS:
             print("Respiration: ", value, device.address)
 
 asyncio.run(MainManager().run())

@@ -1,6 +1,7 @@
 import asyncio
 
-from aidlab import AidlabManager, DataType, DeviceDelegate
+from aidlab import AidlabManager, DataType, Device, DeviceDelegate, DisconnectReason
+
 
 class MainManager(DeviceDelegate):
     async def run(self):
@@ -11,14 +12,14 @@ class MainManager(DeviceDelegate):
             while True:
                 await asyncio.sleep(1)
 
-    async def did_connect(self, device):
+    def did_connect(self, device: Device):
         print("Connected to:", device.address)
-        await device.collect([DataType.RESPIRATION], [])
+        asyncio.create_task(device.collect([DataType.RESPIRATION], []))
 
-    def did_disconnect(self, device):
-        print("Disconnected from:", device.address)
+    def did_disconnect(self, device: Device, reason: DisconnectReason):
+        print("Disconnected from:", device.address, reason)
 
-    def did_receive_respiration(self, device, timestamp: int, value: float):
+    def did_receive_respiration(self, device: Device, timestamp: int, value: float):
         print(value)
 
 asyncio.run(MainManager().run())

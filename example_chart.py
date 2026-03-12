@@ -1,6 +1,9 @@
 import asyncio
-from aidlab import AidlabManager, DataType, DeviceDelegate
+
 from Plot import Plot
+
+from aidlab import AidlabManager, DataType, Device, DeviceDelegate, DisconnectReason
+
 
 class MainManager(DeviceDelegate):
     def __init__(self):
@@ -13,15 +16,15 @@ class MainManager(DeviceDelegate):
             while True:
                 await asyncio.sleep(1)
 
-    async def did_connect(self, device):
-        print("Connected to: %s. You need to wear device to see samples.", device.address)
-        await device.collect([DataType.ECG], [])
+    def did_connect(self, device: Device):
+        print(f"Connected to: {device.address}. You need to wear device to see samples.")
+        asyncio.create_task(device.collect([DataType.ECG], []))
         self.plot.add(0)
 
-    def did_disconnect(self, device):
-        print("Disconnected from: ", device.address)
+    def did_disconnect(self, device: Device, reason: DisconnectReason):
+        print("Disconnected from: ", device.address, reason)
 
-    def did_receive_ecg(self, device, timestamp, value):
+    def did_receive_ecg(self, device: Device, timestamp: int, value: float):
         self.plot.add(value)
 
 asyncio.run(MainManager().run())

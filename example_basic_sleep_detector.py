@@ -4,12 +4,13 @@ Basic Sleep Detector utilizing Aidlab's motion sensor
 import asyncio
 from time import time
 
-from aidlab import AidlabManager, DeviceDelegate, DataType
+from aidlab import AidlabManager, DataType, Device, DeviceDelegate, DisconnectReason
+
 
 class MainManager(DeviceDelegate):
 
     def __init__(self):
-        self.start_time_of_sleeping_position = 0
+        self.start_time_of_sleeping_position = 0.0
         self.is_in_sleeping_position = False
 
     async def run(self):
@@ -20,14 +21,14 @@ class MainManager(DeviceDelegate):
             while True:
                 await asyncio.sleep(1)
 
-    async def did_connect(self, device):
+    def did_connect(self, device: Device):
         print("Connected to: ", device.address)
-        await device.collect([DataType.ORIENTATION], [])
+        asyncio.create_task(device.collect([DataType.ORIENTATION], []))
 
-    def did_disconnect(self, device):
-        print("Disconnected from: ", device.address)
+    def did_disconnect(self, device: Device, reason: DisconnectReason):
+        print("Disconnected from: ", device.address, reason)
 
-    def did_receive_quaternion(self, _, __, qw, qx, qy, qz):
+    def did_receive_quaternion(self, _: Device, __: int, qw: float, qx: float, qy: float, qz: float):
         self.naive_sleep_detector([qw, qx, qy, qz])
 
     def naive_sleep_detector(self, value):
@@ -68,8 +69,8 @@ class MainManager(DeviceDelegate):
         return [new_w, new_x, new_y, new_z]
 
     def basic_sleep_detector(self, vertical_orientation):
-
-        if (vertical_orientation == 'OrientationUp' or vertical_orientation == 'OrientationDown') and self.is_in_sleeping_position == False:
+        is_horizontal = vertical_orientation in {"OrientationUp", "OrientationDown"}
+        if is_horizontal and not self.is_in_sleeping_position:
             self.is_in_sleeping_position = True
             self.start_time_of_sleeping_position = time()
 
