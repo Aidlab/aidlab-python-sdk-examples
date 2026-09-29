@@ -21,6 +21,6 @@ class MainManager(DeviceDelegate):
         print("Disconnected from:", device.address, reason)
 
     def did_detect_exercise(self, _: Device, exercise):
-        print(exercise)
+        print(exercise.name)
 
 asyncio.run(MainManager().run())
