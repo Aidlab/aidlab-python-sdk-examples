@@ -1,6 +1,6 @@
 import asyncio
 
-from aidlab import AidlabManager, DataType, Device, DeviceDelegate, DisconnectReason
+from aidlab import AidlabManager, DataType, Device, DeviceDelegate, DeviceEvent, DisconnectReason, ExerciseEvent
 
 
 class MainManager(DeviceDelegate):
@@ -20,7 +20,9 @@ class MainManager(DeviceDelegate):
     def did_disconnect(self, device: Device, reason: DisconnectReason):
         print("Disconnected from:", device.address, reason)
 
-    def did_detect_exercise(self, _: Device, exercise):
-        print(exercise.name)
+    def did_receive_event(self, _: Device, event: DeviceEvent):
+        # A plank is reported again when it ends; print it once.
+        if isinstance(event, ExerciseEvent) and event.end_timestamp in (None, event.timestamp):
+            print(event.exercise.name)
 
 asyncio.run(MainManager().run())
