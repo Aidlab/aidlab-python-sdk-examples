@@ -1,6 +1,6 @@
 import asyncio
 
-from aidlab import AidlabManager, DataType, Device, DeviceDelegate, DeviceEvent, DisconnectReason, ExerciseEvent
+from aidlab import AidlabManager, Device, DeviceDelegate, DeviceEvent, DeviceEventType, DisconnectReason, ExerciseEvent
 
 
 class MainManager(DeviceDelegate):
@@ -15,7 +15,8 @@ class MainManager(DeviceDelegate):
 
     def did_connect(self, device: Device):
         print("Connected to:", device.address)
-        asyncio.create_task(device.collect([DataType.MOTION, DataType.ORIENTATION], []))
+        # The SDK detects exercises in the motion and orientation that this event collects.
+        asyncio.create_task(device.collect([], events=[DeviceEventType.EXERCISE]))
 
     def did_disconnect(self, device: Device, reason: DisconnectReason):
         print("Disconnected from:", device.address, reason)
