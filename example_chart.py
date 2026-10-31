@@ -16,9 +16,9 @@ class MainManager(DeviceDelegate):
             while True:
                 await asyncio.sleep(1)
 
-    def did_connect(self, device: Device):
+    async def did_connect(self, device: Device):
         print(f"Connected to: {device.address}. You need to wear device to see samples.")
-        asyncio.create_task(device.collect([DataType.ECG], []))
+        await device.collect([DataType.ECG], [])
         self.plot.add(0)
 
     def did_disconnect(self, device: Device, reason: DisconnectReason):

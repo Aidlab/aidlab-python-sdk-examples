@@ -33,9 +33,9 @@ class MainManager(DeviceDelegate):
             await asyncio.sleep(10)
             self.save_to_csv()
 
-    def did_connect(self, device: Device):
+    async def did_connect(self, device: Device):
         print("Connected to:", device.address)
-        asyncio.create_task(device.collect([DataType.ECG, DataType.RESPIRATION], []))
+        await device.collect([DataType.ECG, DataType.RESPIRATION], [])
 
     def did_disconnect(self, device: Device, reason: DisconnectReason):
         print("Disconnected from:", device.address, reason)

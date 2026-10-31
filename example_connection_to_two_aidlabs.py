@@ -23,10 +23,10 @@ class MainManager(DeviceDelegate):
             while True:
                 await asyncio.sleep(1)
 
-    def did_connect(self, device: Device):
+    async def did_connect(self, device: Device):
         print("Connected to: ", device.address)
         if device.address == FIRST_ADDRESS or device.address == SECOND_ADDRESS:
-            asyncio.create_task(device.collect([DataType.RESPIRATION], []))
+            await device.collect([DataType.RESPIRATION], [])
 
     def did_disconnect(self, device: Device, reason: DisconnectReason):
         print("Disconnected from: ", device.address, reason)

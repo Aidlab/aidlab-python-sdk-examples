@@ -13,10 +13,10 @@ class MainManager(DeviceDelegate):
             while True:
                 await asyncio.sleep(1)
 
-    def did_connect(self, device: Device):
+    async def did_connect(self, device: Device):
         print("Connected to:", device.address)
         # The SDK detects exercises in the motion and orientation that this event collects.
-        asyncio.create_task(device.collect([], events=[DeviceEventType.EXERCISE]))
+        await device.collect([], events=[DeviceEventType.EXERCISE])
 
     def did_disconnect(self, device: Device, reason: DisconnectReason):
         print("Disconnected from:", device.address, reason)
