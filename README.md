@@ -14,4 +14,4 @@ To get started with the examples, install their Python dependencies:
 python3 -m pip install -r requirements.txt
 ```
 
-This installs the Aidlab SDK and the packages used by the chart and data export examples.
+This installs the Aidlab SDK and the packages used by the chart, data export and Lab Streaming Layer examples.
